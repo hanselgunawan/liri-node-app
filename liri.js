@@ -2,6 +2,7 @@ const columnify = require("columnify");
 const Twitter = require("twitter");
 const Spotify = require("spotify-web-api-node");
 const request = require("request");
+const inquirer = require("inquirer");
 const fs = require("fs");
 const keys = require("./keys.js");
 const twitter = new Twitter(keys.twitterKeys);
@@ -36,7 +37,7 @@ function displayMovie(error, response, body)
         if (err) {
             return console.log(err);
         }
-        console.log("omdb-log.txt was updated!");
+        //console.log("omdb-log.txt was updated!");
     });
 }
 
@@ -65,12 +66,13 @@ function displayMyTweets()
         });
 
         console.log(columns);
+        console.log("\n");
 
         fs.appendFile("tweet-log.txt", "Execution Date/Time: " + Date() + "\n\n" + columns + "\n============================================================\n\n", function(err) {
             if (err) {
                 return console.log(err);
             }
-            console.log("tweet-log.txt was updated!");
+            //console.log("tweet-log.txt was updated!");
         });
     });
 }
@@ -111,13 +113,14 @@ function displaySpotify(track_title)
                     });
 
                     console.log(columns);
+                    console.log("\n");
 
                     fs.appendFile("spotify-log.txt", "Execution Date/Time: " + Date() + "\n\n" + columns + "\n\n\n", function(err) {
                         if (err) {
                             console.log(err);
                         }
                         else {
-                            console.log("spotify-log.txt was updated!");
+                            //console.log("spotify-log.txt was updated!");
                         }
                     });
                 }, function(err) {
@@ -156,26 +159,105 @@ function doWhatItSays()
     });
 }
 
-let user_command = process.argv[2];
-
-switch (user_command)
+function askSong()
 {
-    case "my-tweets":
-        displayMyTweets();
-        break;
-    case "spotify-this-song":
-        let track_title = process.argv[3];
-        displaySpotify(track_title);
-        break;
-    case "movie-this":
-        let movie_title = process.argv[3];
-        if(movie_title === undefined) movie_title = "Mr Nobody";
-        displayOMDB(movie_title);
-        break;
-    case "do-what-it-says":
-        doWhatItSays();
-        break;
-    default:
-        console.log("No command found.");
-        break;
+    inquirer
+        .prompt([
+            {
+                type: "input",
+                message: "What song?",
+                name: "spotify_song"
+            }
+        ])
+        .then(function(inquirerResponse) {
+            displaySpotify(inquirerResponse.spotify_song);
+            setTimeout(function() {
+                start();
+            }, 1000);
+        });
 }
+
+function askMovie()
+{
+    inquirer
+        .prompt([
+            {
+                type: "input",
+                message: "What movie?",
+                name: "movie_title"
+            }
+        ])
+        .then(function(inquirerResponse) {
+            displayOMDB(inquirerResponse.movie_title);
+            setTimeout(function() {
+                start();
+            }, 1000);
+        });
+}
+
+function start()
+{
+    inquirer
+        .prompt([
+            // Here we give the user a list to choose from.
+            {
+                type: "list",
+                message: "Choose you action:",
+                choices: ["Show My Last 20 Tweets", "Spotify a Song", "Find a Movie", "Read from My Text File", "Exit"],
+                name: "action"
+            }
+        ])
+        .then(function(inquirerResponse) {
+            // If the inquirerResponse confirms, we displays the inquirerResponse's username and pokemon from the answers.
+            if (inquirerResponse.action === "Show My Last 20 Tweets") {
+                displayMyTweets();
+                setTimeout(function() {
+                    start();
+                }, 1000);
+            }
+            else if(inquirerResponse.action === "Spotify a Song")
+            {
+                askSong();
+            }
+            else if(inquirerResponse.action === "Find a Movie")
+            {
+                askMovie();
+            }
+            else if(inquirerResponse.action === "Read from My Text File")
+            {
+                doWhatItSays();
+                setTimeout(function() {
+                    start();
+                }, 2000);
+            }
+            else {
+                console.log("Thank you for using LIRI. The best friend you could ever ask for. See you!\n");
+            }
+        });
+}
+
+start();
+
+// let user_command = process.argv[2];
+//
+// switch (user_command)
+// {
+//     case "my-tweets":
+//         displayMyTweets();
+//         break;
+//     case "spotify-this-song":
+//         let track_title = process.argv[3];
+//         displaySpotify(track_title);
+//         break;
+//     case "movie-this":
+//         let movie_title = process.argv[3];
+//         if(movie_title === undefined) movie_title = "Mr Nobody";
+//         displayOMDB(movie_title);
+//         break;
+//     case "do-what-it-says":
+//         doWhatItSays();
+//         break;
+//     default:
+//         console.log("No command found.");
+//         break;
+// }

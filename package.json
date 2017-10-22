@@ -21,6 +21,7 @@
   "homepage": "https://github.com/hanselgunawan/liri-node-app#readme",
   "dependencies": {
     "columnify": "^1.5.4",
+    "inquirer": "^3.3.0",
     "node-spotify-api": "^1.0.7",
     "request": "^2.83.0",
     "spotify-web-api-node": "^2.5.0",
