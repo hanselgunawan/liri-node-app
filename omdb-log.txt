@@ -68,3 +68,17 @@ Rotten Tomatoes URL: N/A
 
 ============================================================
 
+Execution Date/Time: Mon Oct 23 2017 17:09:50 GMT-0700 (PDT)
+
+Title: Doctor Strange
+Year: 2016
+IMDb Rating: 7.5
+Country: USA
+Language: English
+Plot: While on a journey of physical and spiritual healing, a brilliant neurosurgeon is drawn into the world of the mystic arts.
+Actors: Benedict Cumberbatch, Chiwetel Ejiofor, Rachel McAdams, Benedict Wong
+Rotten Tomatoes Rating: N/A
+Rotten Tomatoes URL: http://www.rottentomatoes.com/m/doctor_strange_2016/
+
+============================================================
+
